@@ -15,15 +15,21 @@ export class AppController {
   @Post('/')
   @Render('index')
   async newReservation(@Body() reservation: newReservationDto){
+    const formData = {
+      name: reservation.name ?? '',
+      email: reservation.email ?? '',
+      startDate: reservation.startDate ?? '',
+      guests: reservation.guests ?? ''
+    }
     const emailRegex = /[a-zA-Z0-9.]+@[a-zA-Z0-9.]+/;
     if (!emailRegex.test(reservation.email.trim())){
       return {
-        error: "Hibás vagy hiányzó email"
+        error: "Hibás vagy hiányzó email", formData
       }
     }
     if (new Date(reservation.startDate).getTime() < new Date().getTime()){
       return {
-        error: "Hibás dátum"
+        error: "Hibás dátum", formData
       }
     }
     
